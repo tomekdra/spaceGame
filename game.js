@@ -367,7 +367,67 @@ const makeSound = (freq, time, type, bool) => {
         osc.stop(now + time);
     }
 };
+const makeSoundBackground = (bool, type) => {
+    if(bool === undefined) bool = true;
+    if(type=== undefined) type = "square";
+    const time = 15;
+    const nuty = {
+        'D6': 1174.66,
+        'C6': 1046.50,
+        'B5': 987.77,
+        'A5': 880.00,
+        'G5': 783.99,
+        'F#5': 739.99,
+        'E6': 1318.51,
+        'E5': 659.26,
+// ###
+        'F#4': 369.99,
+        'E4': 329.63,
+        'D4': 293.66,
+        'C4': 261.63,
+        'B3': 246.94,
+        'A3': 220.00,
+        'G3': 196.00,
+        'F#3': 185.00,
+// ###
+        'E3': 164.81,
+        'D3': 146.83,
+        'C3': 130.81,
+        'B2': 123.47,
+        'A2': 110.00,
+        'G2': 98.00,
+        'F#2': 92.50
+    };
 
+    if(bool === true) {
+        osc = audio.createOscillator();
+        osc.frequency.value = 0;
+        const now = audio.currentTime;
+        osc.type = type;
+        osc.start(now);
+        osc.connect(audio.destination);
+        osc.stop(now + time);
+
+        for (let i = 0; i < time/2; i++){
+            osc.frequency.setValueAtTime(nuty.G3, i + 0.2);
+            osc.frequency.setValueAtTime(nuty.A3, i + 0.4);
+            osc.frequency.setValueAtTime(nuty.G2, i + 0.6);
+            osc.frequency.setValueAtTime(nuty.D3, i + 0.8);
+            osc.frequency.setValueAtTime(nuty.G3, i + 1);
+        }
+        for (let i = time/2; i < time; i++){
+            osc.frequency.setValueAtTime(nuty.C4, i + 0.2);
+            osc.frequency.setValueAtTime(nuty.D4, i + 0.4);
+            osc.frequency.setValueAtTime(nuty.E4, i + 0.6);
+            osc.frequency.setValueAtTime(nuty.C4, i + 0.8);
+            osc.frequency.setValueAtTime(nuty.D4, i + 1);
+            osc.frequency.setValueAtTime(nuty.E4, i + 1.2);
+            osc.frequency.setValueAtTime(0, i + 1.4);
+        }
+
+
+    }
+};
 
 let interval;
 let timeout;
@@ -394,6 +454,7 @@ function newGame() {
     const moon = new Planet (cw/2, 0, 200, astroColors[2], 0,0);
     const moonAmosphere = new Planet (cw/2, 0, 240, 'rgba(0, 0, 0, 0.5)', 0,0);
 
+    makeSoundBackground(true, 'triangle');
 
     let astro = [];
     let mixBox = [];
